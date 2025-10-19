@@ -1,67 +1,53 @@
 @echo off
-%windir%\system32\WindowsPowerShell\v1.0\Powershell.exe write-host -foregroundcolor 4 PLEASE WAIT...
-%windir%\system32\WindowsPowerShell\v1.0\Powershell.exe write-host -foregroundcolor yellow BE PATIENT...
-%windir%\system32\WindowsPowerShell\v1.0\Powershell.exe write-host -foregroundcolor 11 POWER CLEANER NEED TIME TO CLEAN...
-del /f /s /q %systemdrive%\*.tmp
-RD %windir%\$hf_mig$ /Q /S
-del %windir%\2950800.txt /f /q
-for /f %%i in (%windir%\2950800.txt) do rd %windir%\%%i /s /q
-dir %windir%\$NtUninstall* /a:d /b >%windir%\2950800.txt
+title Power Cleaner
+color 0A
 cls
-del /f /s /q %systemdrive%\*._mp
-del /f /s /q %systemdrive%\*.log
-del /f /s /q %systemdrive%\*.gid
-cls
-del /f /s /q %systemdrive%\*.pnf
-del /f /s /q %systemdrive%\infcache.1
-del /f /s /q %systemdrive%\*.chk
-del /f /s /q %systemdrive%\*.old
-cls
-del /f /s /q %systemdrive%\recycled\*.*
-del /f /s /q %windir%\*.bak
-del /f /s /q %windir%\prefetch\*.*
-rd /s /q %windir%\temp & md %windir%\temp
-cls
-del /f /q %userprofile%\cookies\*.*
-del /f /q %userprofile%\recent\*.*
-del /f /s /q "%userprofile%\Local Settings\Temporary Internet Files\*.*"
-del /f /s /q "%userprofile%\Local Settings\Temp\*.*"
-del /f /s /q "%userprofile%\recent\*.*"
-cls
-del /f /s /q %windir%\system32\cid_store.dat
-md %windir%\system32\cid_store.dat
-attrib +s +h +r %windir%\system32\cid_store.dat
-del /f /s /q %windir%\system32\pub_store.dat
-md %windir%\system32\pub_store.dat
-attrib +s +h +r %windir%\system32\pub_store.dat
-del /f /s /q %windir%\system32\xlhcc.dat
-md %windir%\system32\xlhcc.dat
-attrib +s +h +r %windir%\system32\xlhcc.dat
-cls
-del /s /f /q C:\aow_drv.log
-deltree /y c:\windows\tempor~1
-deltree /y c:\windows\temp
-deltree /y c:\windows\tmp
-deltree /y c:\windows\ff*.tmp
-deltree /y c:\windows\history
-deltree /y c:\windows\cookies
-deltree /y c:\windows\recent
-deltree /y c:\windows\spool\printers
-cls
-del /s /f /q C:\ProgramData\Tencent
-del /s /f /q %userprofile%\AppData\Local\Tencent
-del /s /f /q %userprofile%\AppData\Roaming\Tencent
-del /f /s /q "%SystemRoot%\MEMORY.DMP"
-del /f /s /q "%SystemRoot%\Minidump.dmp"
-del /f /s /q "%SystemRoot%\Minidump\*.*"
-del /f /s /q "%SystemRoot%\Minidump\"
-rd /s /q "%SystemRoot%\Minidump\"
-md "%SystemRoot%\Minidump\"
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 255
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 1
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 2
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 8
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 16
-RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 16
 
-%windir%\system32\WindowsPowerShell\v1.0\Powershell.exe write-host -foregroundcolor 2 POWER CLEANER Successfully!
+:: Display status
+powershell -Command "Write-Host 'PLEASE WAIT...' -ForegroundColor Red"
+powershell -Command "Write-Host 'BE PATIENT...' -ForegroundColor Yellow"
+powershell -Command "Write-Host 'POWER CLEANER NEED TIME TO CLEAN...' -ForegroundColor Cyan"
+
+:: Clean temporary files
+del /f /s /q "%systemdrive%\*.tmp" >nul 2>&1
+del /f /s /q "%systemdrive%\*._mp" >nul 2>&1
+del /f /s /q "%systemdrive%\*.log" >nul 2>&1
+del /f /s /q "%systemdrive%\*.gid" >nul 2>&1
+del /f /s /q "%systemdrive%\*.pnf" >nul 2>&1
+del /f /s /q "%systemdrive%\*.chk" >nul 2>&1
+del /f /s /q "%systemdrive%\*.old" >nul 2>&1
+
+:: Clean Windows Temp
+if exist "%windir%\temp" rd /s /q "%windir%\temp"
+md "%windir%\temp" >nul 2>&1
+
+:: Clean user temp & recent
+del /f /q "%userprofile%\cookies\*.*" >nul 2>&1
+del /f /q "%userprofile%\recent\*.*" >nul 2>&1
+del /f /s /q "%userprofile%\AppData\Local\Temp\*.*" >nul 2>&1
+del /f /s /q "%userprofile%\AppData\Local\Microsoft\Windows\INetCache\*.*" >nul 2>&1
+del /f /s /q "%userprofile%\AppData\Local\Microsoft\Windows\History\*.*" >nul 2>&1
+
+:: Clean Prefetch
+if exist "%windir%\prefetch" rd /s /q "%windir%\prefetch"
+md "%windir%\prefetch" >nul 2>&1
+
+:: Clean dump files
+del /f /s /q "%SystemRoot%\MEMORY.DMP" >nul 2>&1
+del /f /s /q "%SystemRoot%\Minidump.dmp" >nul 2>&1
+if exist "%SystemRoot%\Minidump" rd /s /q "%SystemRoot%\Minidump"
+md "%SystemRoot%\Minidump" >nul 2>&1
+
+:: Clean Tencent-related files
+if exist "C:\ProgramData\Tencent" rd /s /q "C:\ProgramData\Tencent"
+if exist "%userprofile%\AppData\Local\Tencent" rd /s /q "%userprofile%\AppData\Local\Tencent"
+if exist "%userprofile%\AppData\Roaming\Tencent" rd /s /q "%userprofile%\AppData\Roaming\Tencent"
+
+:: Clear IE cache silently (ignore if not installed)
+RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 255 >nul 2>&1
+
+:: Success message
+powershell -Command "Write-Host 'POWER CLEANER Successfully!' -ForegroundColor Green"
+
+:: Auto close immediately
+exit /b 0
